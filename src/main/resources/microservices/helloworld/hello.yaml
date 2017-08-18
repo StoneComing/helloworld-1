@@ -1,0 +1,23 @@
+swagger: '2.0'
+info:
+  title: pojo test
+  version: 1.0.0
+  x-java-interface: com.service.helloworld.Hello
+basePath: /hello
+produces:
+  - application/json
+
+paths:
+  /sayhello:
+    get:
+      operationId: sayHello
+      parameters:
+        - name: name
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: say hello
+          schema:
+            type: string
