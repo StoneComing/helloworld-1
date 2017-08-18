@@ -1,6 +1,6 @@
-APPLICATION_ID: crxtest
+APPLICATION_ID: hellotest
 service_description:
-  name: a123
+  name: helloworldserver
   version: 1.0.0
 instance_description:
   properties:
@@ -8,13 +8,13 @@ instance_description:
 cse:
   service:
     registry:
-      address: http://127.0.0.1:9980
-#  config:
-#    client:
-#      serverUri: https://100.125.1.238:30103
-#      refreshMode: 0
-#      refreshPort: 30104
-#      refresh_interval: 5000
+      address: https://100.125.1.238:30100
+  config:
+    client:
+      serverUri: https://100.125.1.238:30103
+      refreshMode: 0
+      refreshPort: 30104
+      refresh_interval: 5000
   rest:
     address: 0.0.0.0:8080
   handler:
@@ -23,15 +23,3 @@ cse:
         default: perf-stats
       Consumer:
         default: bizkeeper-consumer,loadbalance,perf-stats,tracing-consumer,sla-consumer
-
-#########SSL options
-ssl:
-  cc:
-    consumer:
-      sslOptionFactory: com.huawei.paas.foundation.auth.SSLOptionFactoryCloud
-  sc:
-    consumer:
-      sslOptionFactory: com.huawei.paas.foundation.auth.SSLOptionFactoryCloud
-  apiserver:
-    consumer:
-      sslOptionFactory: com.huawei.paas.foundation.auth.SSLOptionFactoryCloud
