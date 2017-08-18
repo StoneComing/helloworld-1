@@ -1,15 +1,14 @@
-1、服务名称：helloworld
+# Swagger generated server
 
-2、默认服务中心地址为：https://100.125.1.34:30100 ，如果在测试环境，请修改 src/main/resources/microservice.yaml 文件
-   属性：cse.service.registry.address
+CSE Jax-Rs Server
 
-3、使用 Dockerfile 制作镜像包：
 
-    一、执行 mvn install 命令打包
-        # 请事先安装mvn插件并且将mvn添加到系统路径中
-
-    二、执行 docker build -t user/name:version . 命令生成镜像
-        # 请事先安装docker
-        # openjdk是基础镜像，可以自行修改
-        # 基础镜像可使用docker pull + imageName 命令从镜像仓库下载
-        # 默认使用最新版本 latest，如果版本有变化，需要同步修改Dockerfile里面的版本号
+## Overview
+这里的代码是根据用户提供的swagger.yaml文件自动生成。生成的代码总的来说分成以下几类：
+1，入口main函数在com.service.jaxrs.JaxrsServer这个类中。
+2，com.service.jaxrs.csedemo.CsedemoImpl这个类插入通过定义jaxrs的annotation，拦截用户请求、解析参数，并将处理的handler代理给csedemoAgent类。
+3，com.service.jaxrs.csedemo.CsedemoAgent类是用户实现具体handler实现的类，理论上只需要用户在这个类里面实现业务逻辑。
+4，com.service.jaxrs.csedemo.Csedemo这个类定义了由swagger.yaml里定义了的operation的函数footprint。它可以理解为是UserControllerImpl实现类的接口。
+5，com.service.jaxrs.csedemo.model这个包下面是swagger.yaml里面定义的definitions，也就是model层的类。
+6，resource目录下定义了一些配置文件，包括log4j的配置文件，微服务的配置信息，以及swagger协议文件等等。
+7，特别注意两点：microservice.yaml里面配置信息要填写正确，生成的有可能有些偏差；swagger.yaml里面的x-java-interface配置项一定要指定为com.service.jaxrs.csedemo.Csedemo。

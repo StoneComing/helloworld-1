@@ -4,18 +4,19 @@
         xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.service</groupId>
-    <artifactId>helloworld</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <artifactId>hellotest</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>com.service.helloworld</name>
+    <name>hellotest</name>
     <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <paas.cse.version>2.1.6</paas.cse.version>
+        <cse.version>2.1.6</cse.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <demo.main>com.service.jaxrs.JaxrsServer</demo.main>
     </properties>
 
     <dependencyManagement>
@@ -23,7 +24,7 @@
             <dependency>
                 <groupId>com.huawei.paas.cse</groupId>
                 <artifactId>cse-dependency</artifactId>
-                <version>${paas.cse.version}</version>
+                <version>${cse.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -34,11 +35,6 @@
         <dependency>
             <groupId>io.servicecomb</groupId>
             <artifactId>provider-jaxrs</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.servicecomb</groupId>
-            <artifactId>provider-springmvc</artifactId>
         </dependency>
 
         <dependency>
@@ -67,11 +63,6 @@
         </dependency>
 
         <dependency>
-            <groupId>io.servicecomb</groupId>
-            <artifactId>provider-pojo</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.huawei.paas.cse</groupId>
             <artifactId>cse-handler-performance-stats</artifactId>
         </dependency>
@@ -89,6 +80,12 @@
         </dependency>
 
         <dependency>
+           <groupId>org.glassfish.jersey.media</groupId>
+           <artifactId>jersey-media-multipart</artifactId>
+           <version>2.22.2</version>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -97,16 +94,10 @@
 
     <build>
         <plugins>
-            <!-- 项目依赖插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <configuration>
-                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                    <excludeTransitive>false</excludeTransitive> <!-- 表示是否不包含间接依赖的包 -->
-                    <stripVersion>false</stripVersion> <!-- 去除版本信息 -->
-                </configuration>
-
+                <version>2.10</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
@@ -115,53 +106,27 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <!-- 拷贝项目依赖包到lib/目录下 -->
-                            <outputDirectory>${project.build.directory}/build/lib</outputDirectory>
-                            <excludeTransitive>false</excludeTransitive>
-                            <stripVersion>false</stripVersion>
+                            <outputDirectory>target/lib</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- 打包插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
-                    <outputDirectory>${project.build.directory}/build</outputDirectory>
                     <archive>
-                        <!-- 生成MANIFEST.MF的设置 -->
                         <manifest>
-                            <!-- 为依赖包添加路径, 这些路径会写在MANIFEST文件的Class-Path下 -->
                             <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <!-- jar启动入口类 -->
-                            <mainClass>com.service.helloworld.PojoServer</mainClass>
+                            <classpathPrefix>./lib/</classpathPrefix>
+                            <mainClass>${demo.main}</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <Class-Path>.</Class-Path>
+                        </manifestEntries>
                     </archive>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <configuration>
-                            <target name="archive">
-                                <tar compression="gzip" destfile="target/app.tar.gz"
-                                     basedir="${project.build.directory}/build">
-                                </tar>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

@@ -1,10 +1,7 @@
 APPLICATION_ID: hellotest
 service_description:
-  name: helloworldserver
-  version: 1.0.0
-instance_description:
-  properties:
-    tags: test1  
+  name: helloworldservice
+  version: 0.0.1
 cse:
   service:
     registry:
@@ -13,16 +10,15 @@ cse:
     client:
       serverUri: https://100.125.1.238:30103
       refreshMode: 0
-      refreshPort: 30104
       refresh_interval: 5000
   monitor:
-   client:
+    client:
       serverUri: https://100.125.1.238:30109
+  grpc:
+    address: 0.0.0.0:9090
   rest:
-    address: 0.0.0.0:8080
+    address: 0.0.0.0:8087
   handler:
     chain:
       Provider:
-        default: perf-stats
-      Consumer:
-        default: bizkeeper-consumer,loadbalance,perf-stats,tracing-consumer,sla-consumer
+        default: bizkeeper-provider,perf-stats,tracing-provider,sla-provider

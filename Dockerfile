@@ -1,7 +1,8 @@
-FROM 10.162.197.95:5000/cse-jre:8u111
+FROM java:8-jdk
 
 WORKDIR /home/apps/
-ADD target/app.tar.gz .
+ADD target/hellotest-1.0.0.jar .
+ADD target/lib ./lib
+ADD start.sh .
 
-ENTRYPOINT ["java", "-jar", "/home/apps/helloworld-1.0.0-SNAPSHOT.jar"]
-
+ENTRYPOINT ["sh", "/home/apps/start.sh"]
